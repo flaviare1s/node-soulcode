@@ -19,7 +19,7 @@ export async function authenticate(connection) {
   try {
     await connection.authenticate()
     console.log('Conexão com o banco de dados realizada com sucesso.')
-  } catch (error) {
-    console.error('Falha na conexão com o banco de dados:', error)
+  } catch (err) {
+    console.log('Um erro aconteceu!', err)
   }
 }
