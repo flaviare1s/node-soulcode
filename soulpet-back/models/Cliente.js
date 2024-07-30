@@ -34,3 +34,12 @@ Endereco.belongsTo(Cliente) // geral uma foreign key na talela enderecos
 // Cliente pode ter vários pets
 Cliente.hasMany(Pet)
 Pet.belongsTo(Cliente) // gera uma foreign key para indicar o responsável
+
+// Cliente tem funções para gerenciar a tabela de clientes
+
+//Cliente.findAll() // Retorna todos os registros da tabela de clientes
+//Cliente.findOne({ where: { id: id } }) // Retorna o registro de acordo ID
+//Cliente.findById(id) // Retorna o registro de acordo ID
+//Cliente.create(cliente) // Cria um novo registro
+//Cliente.update(novos dados, { where: { id: id } }) // Atualiza um registro
+//Cliente.destroy({ where: { id: id } }) // Deleta um registro
