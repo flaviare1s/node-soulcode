@@ -27,13 +27,17 @@ export const Cliente = connection.define('cliente', {
 // Associação 1:1 (Cliente-Endereco)
 // Cliente tem 1 Endereco
 // Endereco ganha uma chave estrangeira
-Cliente.hasOne(Endereco)
+// Cascade indica que caso o cliente seja excluído, o endereço tbm será excluído
+Cliente.hasOne(Endereco, { onDelete: 'CASCADE'})
 Endereco.belongsTo(Cliente) // geral uma foreign key na talela enderecos
 
 // Associação 1:N (Cliente-Pet)
 // Cliente pode ter vários pets
-Cliente.hasMany(Pet)
+Cliente.hasMany(Pet, { onDelete: 'CASCADE' })
 Pet.belongsTo(Cliente) // gera uma foreign key para indicar o responsável
+
+
+
 
 // Cliente tem funções para gerenciar a tabela de clientes
 

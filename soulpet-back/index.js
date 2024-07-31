@@ -90,6 +90,25 @@ app.put('/clientes/:id', async (req, res) => {
   }
 })
 
+
+// DELETE:
+app.delete('/clientes/:id', async (req, res) => {
+  const idCliente = req.params.id
+  try {
+    const cliente = await Cliente.findOne({ where: { id: idCliente } })
+
+    if(cliente) {
+      await cliente.destroy()
+      res.json({ message: 'Cliente removido com sucesso!' })
+    } else {
+      res.status(404).json({ message: 'Cliente não encontrado!' })
+    }
+  } catch {
+    res.status(500).json({ message: 'Erro ao remover cliente!' })
+  }
+})
+
+
 // Rodar a aplicação backend
 app.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000/')
