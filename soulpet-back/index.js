@@ -24,6 +24,30 @@ app.get('/hello', (req, res) => { // função manipuladora de rota
   res.send('Hello, World!') // envio da resposta para quem solicitou
 })
 
+
+// CRUD: Create, Read, Update, Delete
+
+// CREATE:
+app.post('/clientes', async (req, res) => {
+  // Extração de dados do corpo da requisição (enviados pelo usuário)
+  const { nome, email, telefone, endereco } = req.body
+  
+  try {
+    // Tentativa de criação de um novo cliente
+    await Cliente.create(
+      { nome, email, telefone, endereco },
+      { include: [Endereco] }, // Inclui o model endereco na requisição
+    )
+    res.json({ message: 'Cliente criado com sucesso!' })
+  } catch(err) {
+    // Tratamento caso ocorra um erro
+    // 500 = INTERNAL SERVER ERROR
+    res.status(500).json({ message: 'Erro ao criar cliente!' })
+  }
+})
+
+
+// READ:
 // Listagem de todos os clientes
 app.get('/clientes', async (req, res) => {
   const listaClientes = await Cliente.findAll() // = SELECT * FROM cliente
@@ -44,22 +68,25 @@ app.get('/clientes/:id', async (req, res) => {
   }
 })
 
-// Criação de um novo cliente
-app.post('/clientes', async (req, res) => {
-  // Extração de dados do corpo da requisição (enviados pelo usuário)
+
+// UPDATE:
+app.put('/clientes/:id', async (req, res) => {
+  const idCliente = req.params.id
   const { nome, email, telefone, endereco } = req.body
-  
+
   try {
-    // Tentativa de criação de um novo cliente
-    await Cliente.create(
-      { nome, email, telefone, endereco },
-      { include: [Endereco] }, // Inclui o model endereco na requisição
-    )
-    res.json({ message: 'Cliente criado com sucesso!' })
+    const cliente = await Cliente.findOne({ where: { id: idCliente } })
+    if(cliente) {
+      // Atualiza a linha de endereco onde o id do cliente for igual à chave estrangeira na tabela de endereços
+      await Endereco.update(endereco, { where: { clienteId: idCliente } })
+      await cliente.update( { nome, email, telefone })
+      res.json({ message: 'Cliente atualizado com sucesso!' })
+    } else {
+      //404
+      res.status(404).json({ message: 'Cliente não encontrado!' })
+    }
   } catch(err) {
-    // Tratamento caso ocorra um erro
-    // 500 = INTERNAL SERVER ERROR
-    res.status(500).json({ message: 'Erro ao criar cliente!' })
+    res.status(500).json({ message: 'Erro ao atualizar cliente!' })
   }
 })
 
