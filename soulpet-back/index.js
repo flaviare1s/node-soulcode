@@ -109,6 +109,29 @@ app.delete('/clientes/:id', async (req, res) => {
 })
 
 
+// CRUD PETS:
+// CREATE:
+
+//READ:
+app.get('/pets', async (req, res) => {
+  const listaPets = await Pet.findAll()
+  res.json(listaPets)
+})
+
+
+app.get('/pets/:id', async (req, res) => {
+  const pet = await Pet.findOne({
+    where: { id: req.params.id },
+    include: [Cliente]
+  })
+  if (pet) {
+    res.json(pet)
+  } else {
+    res.status(404).json({ message: 'Pet não encontrado!' })
+  }
+})
+
+
 // Rodar a aplicação backend
 app.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000/')
