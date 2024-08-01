@@ -103,7 +103,7 @@ app.delete('/clientes/:id', async (req, res) => {
     } else {
       res.status(404).json({ message: 'Cliente não encontrado!' })
     }
-  } catch {
+  } catch(err) {
     res.status(500).json({ message: 'Erro ao remover cliente!' })
   }
 })
@@ -128,6 +128,24 @@ app.get('/pets/:id', async (req, res) => {
     res.json(pet)
   } else {
     res.status(404).json({ message: 'Pet não encontrado!' })
+  }
+})
+
+// UPDATE:
+app.put('/pets/:id', async (req, res) => {
+  const { nome, tipo, porte, dataNasc } = req.body
+
+  try {
+    const pet = await Pet.findOne({where: { id: req.params.id }})
+    if (pet) {
+      await pet.update({ nome, tipo, porte, dataNasc })
+      res.json({ message: 'Pet atualizado com sucesso!' })
+    } else {
+      res.status(404).json({ message: 'Pet não encontrado!' })
+    }
+  } catch(err) {
+    console.log(err)
+    res.status(500).json({ message: 'Erro ao atualizar pet!' })
   }
 })
 
