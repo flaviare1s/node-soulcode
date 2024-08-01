@@ -123,7 +123,7 @@ app.get('/pets/:id', async (req, res) => {
   const pet = await Pet.findOne({
     where: { id: req.params.id },
     attributes: { exclude: ['createdAt', 'updatedAt'] },
-    include: [{model: Cliente, attributes: ['id', 'nome']}]
+    include: [{model: Cliente, attributes: ['id', ['nome', 'nomeCliente']]}]
     // include: [{ model: Cliente, attributes: {exclude: ["senha"]} }] --- caso quisesse excluir um campo
   })
   if (pet) {
