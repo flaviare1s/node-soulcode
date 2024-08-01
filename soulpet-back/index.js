@@ -111,6 +111,22 @@ app.delete('/clientes/:id', async (req, res) => {
 
 // CRUD PETS:
 // CREATE:
+app.post('/pets', async (req, res) => {
+  const { nome, tipo, porte, dataNasc, clienteId } = req.body
+
+  try {
+    const cliente = await Cliente.findByPk(clienteId)
+
+    if (cliente) {
+      await Pet.create({ nome, tipo, porte, dataNasc, clienteId })
+      res.json({ message: 'Pet criado com sucesso!' })
+    } else {
+      res.status(404).json({ message: 'Cliente não encontrado!' })
+    }
+  } catch(err) {
+    res.status(500).json({ message: 'Erro ao criar pet!' })
+  }
+})
 
 //READ:
 app.get('/pets', async (req, res) => {
@@ -154,7 +170,7 @@ app.put('/pets/:id', async (req, res) => {
 // DELETE:
 app.delete('/pets/:id', async (req, res) => {
   try {
-    const pet = await Pet.findOne({ where: {id: req.params.id }})
+    const pet = await Pet.findByPk(req.params.id)
     if (pet) {
       await pet.destroy()
       res.json({ message: 'Pet removido com sucesso!' })
