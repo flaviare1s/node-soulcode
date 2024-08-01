@@ -95,7 +95,7 @@ app.put('/clientes/:id', async (req, res) => {
 app.delete('/clientes/:id', async (req, res) => {
   const idCliente = req.params.id
   try {
-    const cliente = await Cliente.findOne({ where: { id: idCliente } })
+    const cliente = await Cliente.findOne({ where: { id: idCliente }})
 
     if(cliente) {
       await cliente.destroy()
@@ -146,6 +146,21 @@ app.put('/pets/:id', async (req, res) => {
   } catch(err) {
     console.log(err)
     res.status(500).json({ message: 'Erro ao atualizar pet!' })
+  }
+})
+
+// DELETE:
+app.delete('/pets/:id', async (req, res) => {
+  try {
+    const pet = await Pet.findOne({ where: {id: req.params.id }})
+    if (pet) {
+      await pet.destroy()
+      res.json({ message: 'Pet removido com sucesso!' })
+    } else {
+      res.status(404).json({ message: 'Pet não encontrado!' })
+    }
+  } catch(err) {
+    res.status(500).json({ message: 'Erro ao remover pet!' })
   }
 })
 
