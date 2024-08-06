@@ -26,7 +26,9 @@ petsRouter.post('/pets', async (req, res) => {
 
 //READ:
 petsRouter.get('/pets', async (req, res) => {
-  const listaPets = await Pet.findAll()
+  const listaPets = await Pet.findAll({
+    include: [{model: Cliente, attributes: ['id', ['nome', 'nomeCliente']]}]
+  })
   res.json(listaPets)
 })
 
