@@ -2,6 +2,7 @@ import { connection, authenticate } from './config/database.js'
 import express from 'express'
 import { petsRouter } from './routes/pets.js'
 import { clientesRouter } from './routes/clientes.js'
+import cors from 'cors'
 
 authenticate(connection).then(() => {
   connection.sync() // Sincroniza os Models no banco de dados
@@ -16,6 +17,9 @@ const app = express()
 
 // Garante que todas as requisições que têm body sejam lidas como JSON
 app.use(express.json())
+
+// Configuração do CROS
+app.use(cors({origin: 'http://localhost:5173'}))
 
 // Definir as rotas da aplicação backend
 app.use(petsRouter)
